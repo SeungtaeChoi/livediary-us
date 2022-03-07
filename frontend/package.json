@@ -26,7 +26,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deploy": "cp -r /var/www/test/livediary-react/build/* /var/www/html/livediary-react/"
+    "deploy": "cp -r /var/www/test/livediary-us/frontend/build/* /var/www/html/livediary-us/"
   },
   "eslintConfig": {
     "extends": [
