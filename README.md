@@ -1,5 +1,22 @@
-## livedairy.us
-본 프로젝트는 시간을 효율적으로 사용할 수 있는 livedairy.us 의 소스코드 입니다.
+# livediary.us
+시간을 생생하게 기록하고, 효율적으로 사용하도록 도와줍니다.
 
-### 라이브러리
-메테리얼 디자인 - https://mui.com/
+## 실행환경
+HOSTING
+    - aws > ec2
+OS
+    - linux ubuntu 20.04
+WEB SERVER
+    - nginx, nodejs
+
+## 개발환경, 프레임워크, 라이브러리
+FRONTEND
+    - nodejs
+    - react (creact-react-app)
+    - html
+    - css (material design)
+    - javascript
+BACKEND
+    - nodejs
+    - express
+    - mysql

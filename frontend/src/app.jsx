@@ -1,12 +1,10 @@
 import './app.css';
 import { Route, Routes } from 'react-router-dom';
 import Layout from './layout';
-import UserHome from './pages/userHome';
 import Main from './pages/main';
 import Schedule from './pages/schedule';
 import Search from './pages/search';
 import Task from './pages/task';
-// import mysql from 'mysql';
 
 const App = () => {
 
@@ -14,14 +12,6 @@ const App = () => {
     id : '',
     auth : ''
   }
-
-  // const conn = mysql.createConnection({
-  //   host: "3.35.14.6",
-  //   user: "root",
-  //   password: "soojapark57",
-  //   database: "livediary_us"
-  // })
-  // console.log(conn);
 
   return (
     <Routes>
