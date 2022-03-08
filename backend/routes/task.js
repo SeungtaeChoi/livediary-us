@@ -12,14 +12,14 @@ router.get('/api/getUsername', (req, res, next) => {
     res.send({ username: os.userInfo().username });
 });
 
-router.get('/getData', (req, res) => {
-    db.query("select * from `table`", (err, rows) => {
-    if (!err) {
-        res.send(rows);
-    } else {
-        console.log(`query error : ${err}`);
-        res.send(err);
-    }
+router.get('/getUser', (req, res) => {
+    db.query("select * from `user`", (err, rows) => {
+        if (err) {
+            console.log(`query error : ${err}`);
+            res.send(err);
+        } else {
+            res.send(rows);
+        }
     });
 });
 

@@ -1,12 +1,17 @@
 const express = require('express');
 const path = require('path');
-const router = require("./routes/router");
-
 const app = express();
 const PORT = 4000;
 
+//정적파일
 app.use(express.static(path.join(__dirname, '..', 'public/')));
-app.use("/", router);
+
+//라우팅
+const router = require("./routes/router"); app.use("/", router);
+const user = require('./routes/user'); app.use('/user', user);
+const task = require('./routes/task'); app.use('/task', task);
+
+//실행
 app.listen(PORT, () => {
     console.log(`Check out the app at http://localhost:${PORT}`);
 });
