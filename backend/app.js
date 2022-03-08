@@ -7,7 +7,6 @@ const PORT = 4000;
 app.use(express.static(path.join(__dirname, '..', 'public/')));
 
 //라우팅
-const router = require("./routes/router"); app.use("/", router);
 const user = require('./routes/user'); app.use('/user', user);
 const task = require('./routes/task'); app.use('/task', task);
 
