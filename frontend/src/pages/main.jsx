@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Outlet, useParams } from 'react-router-dom';
 import { Button, Grid, TextField, FormControl, InputLabel, OutlinedInput, InputAdornment, IconButton } from '@mui/material';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import LoadingButton from '@mui/lab/LoadingButton';
-import ArrowCircleRightOutlinedIcon from '@mui/icons-material/ArrowCircleRightOutlined';
 import '@fontsource/comfortaa';
 
 const Main = ({ user, api }) => {
@@ -29,67 +30,96 @@ const Header = () => {
 
 const LoginBody = ({ user, api }) => {
 
-    const [stateLoginInfo, setStateLoginInfo] = useState({
-        userEmail: null,
-        userPassword: null,
+    const userIdInputRef = useRef();
+    const userPwInputRef = useRef();
+
+    const [pageConfig, setPageConfig] = useState({
+        showPassword: false
     });
 
-    const handleChange = (prop) => (event) => {
-        // console.log(`${prop}의 값을 ${event.target.value}로 변경`);
+    const onClickShowPasswordButton = (e) => { // console.log('비밀번호 보임/숨김 토글버튼 클릭 시')
+        e.preventDefault();
+        setPageConfig({
+            ...pageConfig,
+            showPassword: !pageConfig.showPassword,
+        });
+    }
+
+    const [stateLoginInfo, setStateLoginInfo] = useState({
+        userId: '',
+        userPassword: '',
+    });
+
+    const onChangeInput = (prop) => (event) => { // console.log(`${prop}의 값을 ${event.target.value}로 변경`);
         setStateLoginInfo({ ...stateLoginInfo, [prop]: event.target.value });
     };
 
-    const [loadingEmailInputNextButton, setLoadingEmailInputNextButton] = useState(false);
-    const onClickEmailInputNextButton = async () => {
-
+    const [lodingStateLoginButton, setLodingStateLoginButton] = useState(false);
+    const onClickLoginButton = async () => { // console.log('로그인버튼 클릭 시')
+        
         //1. 로딩상태로 변경
-        setLoadingEmailInputNextButton(true);
+        setLodingStateLoginButton(true);
 
-        //2. 이메일 조회 실행
-        console.log(api);
-        const result = await api.run('/user/getUserInfo', 'post', { userEmail: stateLoginInfo.userEmail });
-        console.log(result);
+        //2. 로그인 실행
+        const result = await api.post(`/user`, { userId: stateLoginInfo.userId, userPassword: stateLoginInfo.userPassword });
+        setTimeout(() => { 
+            console.log(result);
+            setLodingStateLoginButton(false);
+        }, 1000);
     }
 
     return (
         <Grid container justifyContent="center" style={{ height: "calc(100% - 43px)" }}>
             <Grid item md={4} sm={6} xs={12} style={{ display: "flex", justifyContent: "center" }}>
                 <div style={{ padding: '0em', height: "100%", width: "340px" }}>
-                    <div style={{ marginTop: "50%" }}>
-                        <div style={{ fontSize: '1.5rem', fontFamily: 'comfortaa', textAlign: "center", marginBottom: "0.5em" }}>회원가입 / 로그인</div>
-                        <FormControl sx={{ width: '100%' }} variant="outlined" required>
-                            <InputLabel htmlFor="email-input">이메일</InputLabel>
+                    <div style={{ marginTop: "0%" }}>
+                        <h2 style={{ textAlign: "center" }}>로그인</h2>
+                        <FormControl sx={{ width: '100%', marginBottom: "0.5em" }} variant="outlined" required>
+                            <InputLabel htmlFor="userId-input">아이디</InputLabel>
                             <OutlinedInput
-                                label="이메일"
-                                id="email-input"
-                                // type={values.showPassword ? 'text' : 'password'}
-                                // value={values.password}
-                                onChange={handleChange('userEmail')}
+                                label="아이디"
+                                id="userId-input"
+                                value={stateLoginInfo.userId}
+                                inputRef={userIdInputRef}
+                                onChange={onChangeInput('userId')}
+                            />
+                        </FormControl>
+                        <FormControl sx={{ width: '100%', marginBottom: "0.5em" }} variant="outlined" required>
+                            <InputLabel htmlFor="password-input">비밀번호</InputLabel>
+                            <OutlinedInput
+                                label="비밀번호"
+                                id="password-input"
+                                type={pageConfig.showPassword ? 'text' : 'password'}
+                                value={stateLoginInfo.userPassword}
+                                onChange={onChangeInput('userPassword')}
+                                inputRef={userPwInputRef}
                                 endAdornment={
                                     <InputAdornment position="end">
-                                        <LoadingButton
-                                            loading={loadingEmailInputNextButton}
-                                            onClick={onClickEmailInputNextButton}
-                                            style={{ minWidth: "unset" }}
-                                            disabled={!stateLoginInfo.userEmail}
-                                        >
-                                            <ArrowCircleRightOutlinedIcon />
-
-                                        </LoadingButton>
-                                        {/* <IconButton
-                                            aria-label="email input next button"
-                                            onClick={onClickEmailInputNextButton}
+                                        <IconButton
+                                            aria-label="비밀번호 보임 여부"
+                                            onClick={onClickShowPasswordButton}
                                             edge="end"
                                         >
-                                            <ArrowCircleRightOutlinedIcon />
-                                        </IconButton> */}
+                                            {pageConfig.showPassword ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
                                     </InputAdornment>
                                 }
                             />
                         </FormControl>
+                        <LoadingButton
+                            variant='contained' 
+                            loading={lodingStateLoginButton}
+                            onClick={onClickLoginButton}
+                            size="large"
+                            // style={{ minWidth: "unset", display:enterState&&'none' }}
+                            disabled={!stateLoginInfo.userId || !stateLoginInfo.userPassword}
+                            style={{ width: '100%' }}
+                        >로그인</LoadingButton>
                         <div style={{ marginTop: "1.5em" }}>
+                            <h3>회원가입 시</h3>
                             <p>✔️&nbsp;&nbsp;새로 접속해도 내용을 유지할 수 있습니다.</p>
                             <p>✔️&nbsp;&nbsp;다른 기기와 연동하여 사용할 수 있습니다.</p>
+                            <Button variant='outlined' style={{ width: '100%' }}>회원가입</Button>
                         </div>
                     </div>
                 </div>
