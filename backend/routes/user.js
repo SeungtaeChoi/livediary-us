@@ -15,4 +15,18 @@ router.get('/:id', (req, res) => {
     });
 });
 
+router.post('/getUserInfo', (req, res) => {
+    const userEmail = req.body.userEmail;
+    res.send(userEmail);
+    
+    db.query(`select * from user where email = '${userEmail}'`, (err, rows) => {
+
+        //실패 시
+        if (err) { res.send(`error_code:${err}`); }
+
+        //성공 시
+        res.send(rows);
+    });
+});
+
 module.exports = router;

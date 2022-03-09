@@ -1,40 +1,35 @@
-import './app.css';
+import { useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
+import './app.css';
 import Layout from './layout';
 import Main from './pages/main';
 import Schedule from './pages/schedule';
 import Search from './pages/search';
 import Task from './pages/task';
 
-const App = () => {
+const App = ({ storage, api }) => {
+  // console.log(api);
 
-  const user = {
-    id : '',
-    auth : ''
-  }
+  const userInitObj = {
+    id: null,
+    role: null,
+  };
+  
+  const [user, setUser] = useState(userInitObj);
 
   return (
     <Routes>
-      <Route element={<Layout user={user} />}>
-        <Route path="/" element={<Main user={user}/>} />
-        <Route path="/:userId" element={<Main user={user}/>} />
-        <Route path="/:userId/schedule" element={<Schedule user={user}/>} />
-        <Route path="/:userId/schedule/:scheduleId" element={<Schedule user={user}/>} />
-        <Route path="/:userId/search" element={<Search user={user} />} />
-        <Route path="/:userId/search/:searchString" element={<Search user={user}/>} />
-        <Route path="/:userId/task" element={<Task user={user}/>} />
-        <Route path="/:userId/task/:taskId" element={<Task user={user}/>} />
+      <Route element={<Layout user={user} api={api} />}>
+        <Route path="/" element={<Main user={user} api={api} />} />
+        <Route path="/:userId/schedule" element={<Schedule user={user} api={api} />} />
+        <Route path="/:userId/schedule/:scheduleId" element={<Schedule user={user} api={api} />} />
+        <Route path="/:userId/search" element={<Search user={user} api={api}  />} />
+        <Route path="/:userId/search/:searchString" element={<Search user={user} api={api} />} />
+        <Route path="/:userId/task" element={<Task user={user} api={api} />} />
+        <Route path="/:userId/task/:taskId" element={<Task user={user} api={api} />} />
       </Route>
     </Routes>
   )
 };
 
 export default App;
-
-/*
-  메인페이지
-    로그인 관련 / 개인 통계
-  오늘
-    진행중인 일 
-  일정
- */
