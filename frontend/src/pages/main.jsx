@@ -55,13 +55,14 @@ const LoginBody = ({ user, api }) => {
     };
 
     const [lodingStateLoginButton, setLodingStateLoginButton] = useState(false);
-    const onClickLoginButton = async () => { // console.log('로그인버튼 클릭 시')
+    const onClickLoginButton = async () => {
+        console.log('로그인버튼 클릭 시')
         
         //1. 로딩상태로 변경
         setLodingStateLoginButton(true);
 
         //2. 로그인 실행
-        const result = await api.post(`/user`, { userId: stateLoginInfo.userId, userPassword: stateLoginInfo.userPassword });
+        const result = await api.post(`/user/login`, { userId: stateLoginInfo.userId, userPassword: stateLoginInfo.userPassword });
         setTimeout(() => { 
             console.log(result);
             setLodingStateLoginButton(false);
