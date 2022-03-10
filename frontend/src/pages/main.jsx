@@ -1,14 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Outlet, useParams } from 'react-router-dom';
-import { Button, Grid, TextField, FormControl, InputLabel, OutlinedInput, InputAdornment, IconButton } from '@mui/material';
+import { Button, Grid, FormControl, InputLabel, OutlinedInput, InputAdornment, IconButton, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import LoadingButton from '@mui/lab/LoadingButton';
 import '@fontsource/comfortaa';
+import CustomAlertDialog from '../components/custom/customAlertDialog/customAlertDialog';
 
 const Main = ({ user, api }) => {
+    // console.log('main');
     const { id } = useParams();
-    console.log('main');
 
     return (
         <div style={{ height: "100%" }}>
@@ -37,7 +38,8 @@ const LoginBody = ({ user, api }) => {
         showPassword: false
     });
 
-    const onClickShowPasswordButton = (e) => { // console.log('비밀번호 보임/숨김 토글버튼 클릭 시')
+    const onClickShowPasswordButton = (e) => {
+        // console.log('비밀번호 보임/숨김 토글버튼 클릭 시')
         e.preventDefault();
         setPageConfig({
             ...pageConfig,
@@ -50,23 +52,30 @@ const LoginBody = ({ user, api }) => {
         userPassword: '',
     });
 
-    const onChangeInput = (prop) => (event) => { // console.log(`${prop}의 값을 ${event.target.value}로 변경`);
+    const onChangeInput = (prop) => (event) => {
+        // console.log(`${prop}의 값을 ${event.target.value}로 변경`);
         setStateLoginInfo({ ...stateLoginInfo, [prop]: event.target.value });
     };
 
+    const [customAlertDialogOpenState, setCustomAlertDialogOpenState] = useState(false);
+
     const [lodingStateLoginButton, setLodingStateLoginButton] = useState(false);
     const onClickLoginButton = async () => {
-        console.log('로그인버튼 클릭 시')
-        
+        // console.log('로그인버튼 클릭 시');
+
         //1. 로딩상태로 변경
         setLodingStateLoginButton(true);
+        setTimeout(async () => {
 
-        //2. 로그인 실행
-        const result = await api.post(`/user/login`, { userId: stateLoginInfo.userId, userPassword: stateLoginInfo.userPassword });
-        setTimeout(() => { 
-            console.log(result);
-            setLodingStateLoginButton(false);
-        }, 1000);
+            //2. 로그인 실행
+            const result = await api.post(`/user/login`, { userId: stateLoginInfo.userId, userPassword: stateLoginInfo.userPassword });
+            alert(result.error);
+            if (result.error === "invalid_user") { setCustomAlertDialogOpenState(true); }
+            if (result) {
+                setLodingStateLoginButton(false);
+            }
+
+        }, 500);
     }
 
     return (
@@ -108,7 +117,7 @@ const LoginBody = ({ user, api }) => {
                             />
                         </FormControl>
                         <LoadingButton
-                            variant='contained' 
+                            variant='contained'
                             loading={lodingStateLoginButton}
                             onClick={onClickLoginButton}
                             size="large"
@@ -122,6 +131,12 @@ const LoginBody = ({ user, api }) => {
                             <p>✔️&nbsp;&nbsp;다른 기기와 연동하여 사용할 수 있습니다.</p>
                             <Button variant='outlined' style={{ width: '100%' }}>회원가입</Button>
                         </div>
+                        <CustomAlertDialog
+                            openState={customAlertDialogOpenState}
+                            setOpenState={setCustomAlertDialogOpenState}
+                            title="회원정보를 찾을 수 없습니다."
+                            description="다시 확인 후 로그인해 주세요."
+                        />
                     </div>
                 </div>
             </Grid>

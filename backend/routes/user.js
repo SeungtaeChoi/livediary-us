@@ -6,11 +6,11 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 router.get('/:id', (req, res) => {
-    let sql = `select * from user where id = '${req.params.id}'`;
+    let sql = `select * from user_a where id = '${req.params.id}'`;
 
     db.query(sql, (err, rows) => {
         //쿼리 실패 시
-        if (err) { res.status(500).send({ error: err }); }
+        if (err) { res.status(500).json({ error: err }); }
         //쿼리 성공 시
         res.send(rows);
     });
