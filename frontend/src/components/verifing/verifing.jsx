@@ -52,7 +52,7 @@ const Verifing = ({ api, setVerify }) => {
     }, [verifingAction]);
 
     return (
-        <div style={{ width: "100vw", height:"100vh", display: "flex", justifyContent:"center", alignItems:"center" }}>
+        <div style={{ width: "100vw", height:"100vh", backgroundColor:"#fff", display: "flex", justifyContent:"center", alignItems:"center" }}>
             <CircularProgress />
             <AlertDialog alertDialog={alertDialog} setAlertDialog={setAlertDialog} />
         </div>
