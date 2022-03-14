@@ -15,21 +15,23 @@ import SearchIcon from '@mui/icons-material/Search';
 import moment from 'moment';
 
 const Layout = ({ user }) => {
+  // console.log('Layout');
+
   let navigate = useNavigate();
   let location = useLocation();
+  const today = moment().format('YYYY-MM-DD'); //오늘
 
   //게스트 설정
   let userId = 'guest';
   if(user.id){ userId = user.id; }
 
-  const today = moment().format('YYYY-MM-DD'); //오늘
-
+  //state
   const [bottomNavValue, setBottomNavValue] = useState(location.pathname);
-  // const [drawerState, setDrawerState] = useState(false);
 
-  const changeBottomNavValue = (event, newValue) => {
+  //fn
+  const onClickBottomNavigation = (event, newValue) => {
+    //console.log('하단 네비게이션 버튼 클릭 시');
     navigate(newValue);
-
     setBottomNavValue(newValue);
   }
 
@@ -43,7 +45,7 @@ const Layout = ({ user }) => {
           <BottomNavigation
             showLabels
             value={bottomNavValue}
-            onChange={changeBottomNavValue}
+            onChange={onClickBottomNavigation}
           >
             <BottomNavigationAction value={'/'} icon={
               <>

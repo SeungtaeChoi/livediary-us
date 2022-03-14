@@ -5,19 +5,18 @@ import './index.css';
 import App from './app';
 import Api from './services/api';
 
-const api = new Api();
+// console.log('index.js');
 
-let storage = {};
+const api = new Api(`${window.location.protocol}//${window.location.hostname}:4000`);
 
 window.addEventListener("storage", (e) => {
-  // console.log('스토리지 변경감지', e);
+  console.log('스토리지 변경감지', e);
 });
-
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <App storage={storage} api={api} />
+      <App api={api} />
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')
