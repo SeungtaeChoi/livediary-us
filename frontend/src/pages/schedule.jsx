@@ -1,13 +1,10 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
-const Schedule = ({user}) => {
+const Schedule = ({ user, api }) => {
 
-    console.log('user.id', user.id);
-    
-    const { userId, scheduleId } = useParams();
+    const { userId } = useParams();
     console.log('userId', userId);
-    console.log('scheduleId', scheduleId);
 
     return (
         <div>Schedule page</div>

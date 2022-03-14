@@ -17,7 +17,7 @@ const AlertDialog = (props) => {
             onClose={(e, reason) => { if (reason !== 'backdropClick') { handleClose(); } }}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
-            PaperProps={isBrowser && { sx: { position: "fixed", top: "10%" } }}
+            PaperProps={isBrowser ? { sx: { position: "fixed", top: "10%" } } : {}}
             fullWidth={true}
             maxWidth="xs"
         >

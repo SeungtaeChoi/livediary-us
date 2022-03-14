@@ -7,6 +7,7 @@ import Schedule from './pages/schedule';
 import Search from './pages/search';
 import Task from './pages/task';
 import Verifing from './components/verifing/verifing';
+import Now from './pages/now';
 
 const App = ({ api }) => {
     // console.log('app.js');
@@ -21,13 +22,13 @@ const App = ({ api }) => {
         <Routes>
             {verify ?
                 <Route element={<Layout user={user} api={api} />}>
-                    <Route path="/" element={<Main user={user} setUser={setUser} api={api} />} />
-                    <Route path="/:userId/schedule" element={<Schedule user={user} api={api} />} />
-                    <Route path="/:userId/schedule/:scheduleId" element={<Schedule user={user} api={api} />} />
-                    <Route path="/:userId/search" element={<Search user={user} api={api} />} />
-                    <Route path="/:userId/search/:searchString" element={<Search user={user} api={api} />} />
-                    <Route path="/:userId/task" element={<Task user={user} api={api} />} />
-                    <Route path="/:userId/task/:taskId" element={<Task user={user} api={api} />} />
+                    <Route path="/" element={<Main user={user} setUser={setUser} userInitObj={userInitObj} api={api} />} />
+                    <Route path="/schedule" element={<Schedule user={user} api={api} />} />
+                    <Route path="/now" element={<Now user={user} api={api} />} />
+                    <Route path="/search" element={<Search user={user} api={api} />} />
+                    <Route path="/search/:searchString" element={<Search user={user} api={api} />} />
+                    <Route path="/task" element={<Task user={user} api={api} />} />
+                    <Route path="/task/:taskId" element={<Task user={user} api={api} />} />
                 </Route>
                 :
                 <Route path="*" element={<Verifing api={api} setVerify={setVerify}/>} />

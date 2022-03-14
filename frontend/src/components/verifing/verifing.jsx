@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { CircularProgress } from '@mui/material';
 import { AlertDialog } from '../custom/dialog';
 
 const Verifing = ({ api, setVerify }) => {
@@ -45,14 +46,16 @@ const Verifing = ({ api, setVerify }) => {
     }, [api, setVerify]);
 
     useEffect(() => {
-        verifingAction();
+        setTimeout(()=>{
+            verifingAction();
+        }, 700);
     }, [verifingAction]);
 
     return (
-        <>
-            인증 중...
+        <div style={{ width: "100vw", height:"100vh", display: "flex", justifyContent:"center", alignItems:"center" }}>
+            <CircularProgress />
             <AlertDialog alertDialog={alertDialog} setAlertDialog={setAlertDialog} />
-        </>
+        </div>
     )
 }
 

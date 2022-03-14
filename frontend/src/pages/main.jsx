@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
-import { Outlet, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { isMobile } from 'react-device-detect';
-import { Button, Grid, FormControl, InputLabel, OutlinedInput, InputAdornment, IconButton, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import { Button, Grid, TextField, InputAdornment, IconButton, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -9,15 +9,13 @@ import '@fontsource/comfortaa';
 import { AlertDialog } from '../components/custom/dialog';
 import { changeToLowerCase } from '../services/function';
 
-const Main = ({ user, setUser, api }) => {
+const Main = ({ user, setUser, userInitObj, api }) => {
     // console.log('main');
-    const { id } = useParams();
-    // console.log(id);
 
     return (
         <div style={{ height: "100%" }}>
             <Header />
-            {user.id ? <UserBody user={user} setUser={setUser} api={api} /> : <LoginBody user={user} setUser={setUser} api={api} />}
+            {user.id ? <UserBody user={user} setUser={setUser} userInitObj={userInitObj} /> : <LoginBody user={user} setUser={setUser} api={api} />}
         </div>
     )
 }
@@ -68,7 +66,7 @@ const LoginBody = ({ user, setUser, api }) => {
 
             //2. 로그인 실행
             const result = await api.post(`/user/login`, { userId: stateLoginInfo.userId, userPassword: stateLoginInfo.userPassword });
-            console.log(result);
+            // console.log(result);
             setLodingStateLoginButton(false);
             switch (result.error) {
                 case undefined: //성공
@@ -96,26 +94,25 @@ const LoginBody = ({ user, setUser, api }) => {
                 <div style={{ padding: '0em', height: "100%", width: "340px" }}>
                     <div style={{ marginTop: "0%" }}>
                         <h2 style={{ textAlign: "center" }}>로그인</h2>
-                        <FormControl sx={{ width: '100%', marginBottom: "1em" }} variant="outlined" required>
-                            <InputLabel htmlFor="userId-input">아이디</InputLabel>
-                            <OutlinedInput
-                                label="아이디"
-                                id="userId-input"
-                                value={stateLoginInfo.userId}
-                                inputRef={userIdInputRef}
-                                onChange={onChangeInput('userId')}
-                            />
-                        </FormControl>
-                        <FormControl sx={{ width: '100%', marginBottom: "1em" }} variant="outlined" required>
-                            <InputLabel htmlFor="password-input">비밀번호</InputLabel>
-                            <OutlinedInput
-                                label="비밀번호"
-                                id="password-input"
-                                type={pageConfig.showPassword ? 'text' : 'password'}
-                                value={stateLoginInfo.userPassword}
-                                onChange={onChangeInput('userPassword')}
-                                inputRef={userPasswordInputRef}
-                                endAdornment={
+                        <TextField
+                            label="아이디"
+                            id="userId-input"
+                            size="small"
+                            inputRef={userIdInputRef}
+                            onChange={onChangeInput('userId')}
+                            sx={{ width: '100%', marginBottom: "1em" }}
+                            required
+                        />
+                        <TextField
+                            label="비밀번호"
+                            id="userPassword-input"
+                            size="small"
+                            type={pageConfig.showPassword ? 'text' : 'password'}
+                            inputRef={userPasswordInputRef}
+                            onChange={onChangeInput('userPassword')}
+                            sx={{ width: '100%', marginBottom: "1em" }}
+                            InputProps={{
+                                endAdornment:
                                     <InputAdornment position="end">
                                         <IconButton
                                             aria-label="비밀번호 보임 여부"
@@ -125,14 +122,13 @@ const LoginBody = ({ user, setUser, api }) => {
                                             {pageConfig.showPassword ? <VisibilityOff /> : <Visibility />}
                                         </IconButton>
                                     </InputAdornment>
-                                }
-                            />
-                        </FormControl>
+                            }}
+                            required
+                        />
                         <LoadingButton
                             variant='contained'
                             loading={lodingStateLoginButton}
                             onClick={onClickLoginButton}
-                            size="large"
                             style={{ width: '100%' }}
                         >로그인</LoadingButton>
                         <div style={{ marginTop: "1.5em" }}>
@@ -253,7 +249,6 @@ const JoinBody = ({ user, api }) => {
             <Button
                 onClick={onClickJoinDialogOpenButton}
                 variant='outlined'
-                size="large"
                 style={{ width: '100%' }}
             >회원가입</Button>
             <Dialog
@@ -268,28 +263,26 @@ const JoinBody = ({ user, api }) => {
                     {"회원가입"}
                 </DialogTitle>
                 <DialogContent>
-                    <FormControl sx={{ width: '100%', marginBottom: "1em", marginTop: "0.5em" }} variant="outlined" required>
-                        <InputLabel htmlFor="userId-input">아이디</InputLabel>
-                        <OutlinedInput
-                            label="아이디"
-                            autoComplete="off"
-                            id="userId-input"
-                            inputRef={userIdInputRef}
-                            value={stateJoinInfo.userId}
-                            onChange={onChangeInput('userId')}
-                            onBlur={onBlurUserIdInput}
-                        />
-                    </FormControl>
-                    <FormControl sx={{ width: '100%', marginBottom: "1em" }} variant="outlined" required>
-                        <InputLabel htmlFor="password-input">비밀번호</InputLabel>
-                        <OutlinedInput
-                            label="비밀번호"
-                            id="userPassword-input"
-                            type={pageConfig.showPassword ? 'text' : 'password'}
-                            value={stateJoinInfo.userPassword}
-                            onChange={onChangeInput('userPassword')}
-                            inputRef={userPasswordInputRef}
-                            endAdornment={
+                    <TextField
+                        label="아이디"
+                        id="userId-input"
+                        size="small"
+                        inputRef={userIdInputRef}
+                        onChange={onChangeInput('userId')}
+                        onBlur={onBlurUserIdInput}
+                        sx={{ width: '100%', marginBottom: "1em", marginTop: "0.5em" }}
+                        required
+                    />
+                    <TextField
+                        label="비밀번호"
+                        id="userPassword-input"
+                        size="small"
+                        type={pageConfig.showPassword ? 'text' : 'password'}
+                        inputRef={userPasswordInputRef}
+                        onChange={onChangeInput('userPassword')}
+                        sx={{ width: '100%', marginBottom: "1em" }}
+                        InputProps={{
+                            endAdornment:
                                 <InputAdornment position="end">
                                     <IconButton
                                         aria-label="비밀번호 보임 여부"
@@ -299,19 +292,19 @@ const JoinBody = ({ user, api }) => {
                                         {pageConfig.showPassword ? <VisibilityOff /> : <Visibility />}
                                     </IconButton>
                                 </InputAdornment>
-                            }
-                        />
-                    </FormControl>
-                    <FormControl sx={{ width: '100%', marginBottom: "1em" }} variant="outlined" required>
-                        <InputLabel htmlFor="password-input">비밀번호 재입력</InputLabel>
-                        <OutlinedInput
-                            label="비밀번호 재입력"
-                            id="userRePassword-input"
-                            type={pageConfig.showPassword ? 'text' : 'password'}
-                            value={stateJoinInfo.userRePassword}
-                            onChange={onChangeInput('userRePassword')}
-                            inputRef={userRePasswordInputRef}
-                            endAdornment={
+                        }}
+                        required
+                    />
+                    <TextField
+                        label="비밀번호"
+                        id="userRePassword-input"
+                        size="small"
+                        type={pageConfig.showPassword ? 'text' : 'password'}
+                        inputRef={userRePasswordInputRef}
+                        onChange={onChangeInput('userRePassword')}
+                        sx={{ width: '100%', marginBottom: "1em" }}
+                        InputProps={{
+                            endAdornment:
                                 <InputAdornment position="end">
                                     <IconButton
                                         aria-label="비밀번호 보임 여부"
@@ -321,14 +314,13 @@ const JoinBody = ({ user, api }) => {
                                         {pageConfig.showPassword ? <VisibilityOff /> : <Visibility />}
                                     </IconButton>
                                 </InputAdornment>
-                            }
-                        />
-                    </FormControl>
+                        }}
+                        required
+                    />
                     <LoadingButton
                         variant='contained'
                         loading={lodingStateJoinButton}
                         onClick={onClickJoinButton}
-                        size="large"
                         style={{ width: '100%' }}
                     >완료</LoadingButton>
                 </DialogContent>
@@ -341,12 +333,23 @@ const JoinBody = ({ user, api }) => {
     )
 }
 
-const UserBody = ({ user, setUser, api }) => {
+const UserBody = ({ user, setUser, userInitObj }) => {
+    let location = useLocation();
+
+    //fn
+    const onClickLogOutButton = () => {
+        // console.log("로그아웃 버튼 클릭 시");
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('user');
+        setUser({...user, id:null});
+        location.href = '/';
+    }
 
     return (
         <>
+            <h3>{user.id}님 로그인 중</h3>
             <Button
-                // onClick={}
+                onClick={onClickLogOutButton}
             >로그아웃</Button>
         </>
     );
