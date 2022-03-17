@@ -164,9 +164,6 @@ const TaskList = ({ user, api }) => {
     ]);
 
     //fn
-    useEffect(() => {
-        console.log(todos);
-    }, [todos]);
     const onDragEnd = (result) => {
         // console.log('드래그 & 드랍 종료');
 
@@ -185,11 +182,13 @@ const TaskList = ({ user, api }) => {
         const id = e.target.id;
         const keyCode = e.keyCode;
         const value = e.target.innerText;
-        console.log(keyCode);
 
         switch (keyCode) {
             case 8:
                 // console.log('백스페이스 키보드');
+                if(value.length === 0){
+                    window.alert(e.target.innerText);
+                }
                 if (!value) {
                     // console.log('삭제');
                     e.preventDefault();
@@ -215,22 +214,28 @@ const TaskList = ({ user, api }) => {
                 // console.log('아래로 가기 키보드')
                 if ((index + 1) < todos.length) {
                     e.preventDefault();
-                    const preNode = document.getElementById(todos[index + 1].id);
-                    setCaretToEnd(preNode);
+                    const nextNode = document.getElementById(todos[index + 1].id);
+                    setCaretToEnd(nextNode);
                 }
                 break;
             case 13:
                 // console.log('엔터 키보드');
                 e.preventDefault();
-                // const preNode = document.getElementById(todos[index + 1].id);
+                let newId = "rrr";
+
+                setTodos(() => {
+                    // console.log('바로 뒤에 인풋 추가');
+                    
+                    const updated = [...todos];
+                    updated.splice(Number(index) + 1, 0, {id:newId, title:''});
+                    return updated;
+                });
+
+                // console.log('커서 옮기기');
                 
-                // setStateTaskInputList(() => {
-                //     // console.log('바로 뒤에 인풋 추가');
-                //     const updated = [...stateTaskInputList];
-                //     updated.splice(Number(index) + 1, 0, '');
-                //     return updated;
-                // });
-                // setCaretToEnd(preNode);
+                // const nextNode = document.getElementById(newId);
+                // console.log(nextNode);
+                // setCaretToEnd(nextNode);
                 break;
         }
     }
