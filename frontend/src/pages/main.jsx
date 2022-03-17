@@ -1,7 +1,8 @@
 import React, { useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { isMobile } from 'react-device-detect';
-import { Button, Grid, TextField, InputAdornment, IconButton, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import { Layout, LayoutCenter } from '../layout';
+import { Button, Box, TextField, InputAdornment, IconButton, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -13,10 +14,14 @@ const Main = ({ user, setUser, userInitObj, api }) => {
     // console.log('main');
 
     return (
-        <div style={{ height: "100%" }}>
-            <Header />
-            {user.id ? <UserBody user={user} setUser={setUser} userInitObj={userInitObj} /> : <LoginBody user={user} setUser={setUser} api={api} />}
-        </div>
+        <Layout user={user} api={api}>
+            <LayoutCenter>
+                <div style={{ height: "100%" }}>
+                    <Header />
+                    {user.id ? <UserBody user={user} setUser={setUser} userInitObj={userInitObj} /> : <LoginBody user={user} setUser={setUser} api={api} />}
+                </div>
+            </LayoutCenter>
+        </Layout>
     )
 }
 
@@ -89,56 +94,54 @@ const LoginBody = ({ user, setUser, api }) => {
     }
 
     return (
-        <Grid container justifyContent="center" style={{ height: "calc(100% - 43px)" }}>
-            <Grid item md={4} sm={6} xs={12} style={{ display: "flex", justifyContent: "center" }}>
-                <div style={{ padding: '0em', height: "100%", width: "340px" }}>
-                    <div style={{ marginTop: "0%" }}>
-                        <h2 style={{ textAlign: "center" }}>로그인</h2>
-                        <TextField
-                            label="아이디"
-                            id="userId-input"
-                            size="small"
-                            inputRef={userIdInputRef}
-                            onChange={onChangeInput('userId')}
-                            sx={{ width: '100%', marginBottom: "1em" }}
-                            required
-                        />
-                        <TextField
-                            label="비밀번호"
-                            id="userPassword-input"
-                            size="small"
-                            type={pageConfig.showPassword ? 'text' : 'password'}
-                            inputRef={userPasswordInputRef}
-                            onChange={onChangeInput('userPassword')}
-                            sx={{ width: '100%', marginBottom: "1em" }}
-                            InputProps={{
-                                endAdornment:
-                                    <InputAdornment position="end">
-                                        <IconButton
-                                            aria-label="비밀번호 보임 여부"
-                                            onClick={onClickShowPasswordButton}
-                                            edge="end"
-                                        >
-                                            {pageConfig.showPassword ? <VisibilityOff /> : <Visibility />}
-                                        </IconButton>
-                                    </InputAdornment>
-                            }}
-                            required
-                        />
-                        <LoadingButton
-                            variant='contained'
-                            loading={lodingStateLoginButton}
-                            onClick={onClickLoginButton}
-                            style={{ width: '100%' }}
-                        >로그인</LoadingButton>
-                        <div style={{ marginTop: "1.5em" }}>
-                            <JoinBody user={user} api={api} />
-                        </div>
+        <Box style={{ display: "flex", justifyContent: "center" }}>
+            <div style={{ padding: '0em', height: "100%", width: "340px" }}>
+                <div style={{ marginTop: "0%" }}>
+                    <h2 style={{ textAlign: "center" }}>로그인</h2>
+                    <TextField
+                        label="아이디"
+                        id="userId-input"
+                        size="small"
+                        inputRef={userIdInputRef}
+                        onChange={onChangeInput('userId')}
+                        sx={{ width: '100%', marginBottom: "1em" }}
+                        required
+                    />
+                    <TextField
+                        label="비밀번호"
+                        id="userPassword-input"
+                        size="small"
+                        type={pageConfig.showPassword ? 'text' : 'password'}
+                        inputRef={userPasswordInputRef}
+                        onChange={onChangeInput('userPassword')}
+                        sx={{ width: '100%', marginBottom: "1em" }}
+                        InputProps={{
+                            endAdornment:
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="비밀번호 보임 여부"
+                                        onClick={onClickShowPasswordButton}
+                                        edge="end"
+                                    >
+                                        {pageConfig.showPassword ? <VisibilityOff /> : <Visibility />}
+                                    </IconButton>
+                                </InputAdornment>
+                        }}
+                        required
+                    />
+                    <LoadingButton
+                        variant='contained'
+                        loading={lodingStateLoginButton}
+                        onClick={onClickLoginButton}
+                        style={{ width: '100%' }}
+                    >로그인</LoadingButton>
+                    <div style={{ marginTop: "1.5em" }}>
+                        <JoinBody user={user} api={api} />
                     </div>
                 </div>
-                <AlertDialog alertDialog={alertDialog} setAlertDialog={setAlertDialog} />
-            </Grid>
-        </Grid>
+            </div>
+            <AlertDialog alertDialog={alertDialog} setAlertDialog={setAlertDialog} />
+        </Box>
     )
 }
 
@@ -341,7 +344,7 @@ const UserBody = ({ user, setUser, userInitObj }) => {
         // console.log("로그아웃 버튼 클릭 시");
         localStorage.removeItem('access_token');
         localStorage.removeItem('user');
-        setUser({...user, id:null});
+        setUser({ ...user, id: null });
         location.href = '/';
     }
 

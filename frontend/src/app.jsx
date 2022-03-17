@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import './app.css';
-import Layout from './layout';
 import Main from './pages/main';
 import Schedule from './pages/schedule';
 import Search from './pages/search';
@@ -21,7 +20,7 @@ const App = ({ api }) => {
     return (
         <Routes>
             {verify ?
-                <Route element={<Layout user={user} api={api} />}>
+                <>
                     <Route path="/" element={<Main user={user} setUser={setUser} userInitObj={userInitObj} api={api} />} />
                     <Route path="/schedule" element={<Schedule user={user} api={api} />} />
                     <Route path="/now" element={<Now user={user} api={api} />} />
@@ -29,9 +28,9 @@ const App = ({ api }) => {
                     <Route path="/search/:searchString" element={<Search user={user} api={api} />} />
                     <Route path="/task" element={<Task user={user} api={api} />} />
                     <Route path="/task/:taskId" element={<Task user={user} api={api} />} />
-                </Route>
+                </>
                 :
-                <Route path="*" element={<Verifing api={api} setVerify={setVerify}/>} />
+                <Route path="*" element={<Verifing api={api} setVerify={setVerify} />} />
             }
         </Routes>
     )

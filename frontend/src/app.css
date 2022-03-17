@@ -1,3 +1,4 @@
 * {
   font-family: nanum-gothic;
+  box-sizing: border-box; /* padding시 늘어남 방지 */
 }

@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Outlet, useNavigate, useLocation } from 'react-router-dom';
-import { Box, Paper, BottomNavigation, BottomNavigationAction, Avatar } from '@mui/material';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Box, Paper, BottomNavigation, BottomNavigationAction, Avatar, Grid } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
@@ -8,7 +8,8 @@ import ListAltIcon from '@mui/icons-material/ListAlt';
 import SearchIcon from '@mui/icons-material/Search';
 import { blue } from '@mui/material/colors';
 
-const Layout = ({ user }) => {
+const Layout = ({ user, api, children }) => {
+    // console.log('layout');
     let navigate = useNavigate();
     let location = useLocation();
 
@@ -28,7 +29,9 @@ const Layout = ({ user }) => {
 
     return (
         <>
-            <main style={{ paddingBottom: "55px", height:"calc(100% - 55px)" }}><Outlet /></main>
+            <main style={{ paddingBottom: "55px", height: "100%" }}>
+                <Grid container justifyContent="center" style={{ height: "100%" }}>{children}</Grid>
+            </main>
             <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
                 <Box>
                     <BottomNavigation
@@ -58,4 +61,8 @@ const Layout = ({ user }) => {
     );
 };
 
-export default Layout;
+const LayoutLeft = ({ children }) => <Grid item md={4} sm={6} xs={12} style={{ height: "100%" }}>{children}</Grid>;
+const LayoutCenter = ({ children }) => <Grid item md={4} sm={6} xs={12} style={{ backgroundColor: "#fff", width:"100%", height: "100%", paddingBottom:"2px" }}>{children}</Grid>;
+const LayoutRight = ({ children }) => <Grid item md={4} sm={6} xs={12} style={{ height: "100%" }}>{children}</Grid>;
+
+export { Layout, LayoutLeft, LayoutCenter, LayoutRight };
