@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { Grid, Paper } from '@mui/material';
+import { Grid } from '@mui/material';
 
 const Task = ({user}) => {
 

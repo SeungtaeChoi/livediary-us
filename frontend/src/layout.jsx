@@ -1,14 +1,13 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { isMobile, isBrowser } from 'react-device-detect';
 import { Box, Paper, BottomNavigation, BottomNavigationAction, Avatar, Grid } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import EventNoteIcon from '@mui/icons-material/EventNote';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
-import ListAltIcon from '@mui/icons-material/ListAlt';
 import SearchIcon from '@mui/icons-material/Search';
 import { blue } from '@mui/material/colors';
 
-const Layout = ({ user, api, children }) => {
+const Layout = ({ user, children }) => {
     // console.log('layout');
     let navigate = useNavigate();
     let location = useLocation();
@@ -29,11 +28,11 @@ const Layout = ({ user, api, children }) => {
 
     return (
         <>
-            <main style={{ paddingBottom: "55px", height: "100%" }}>
+            <main style={{ paddingBottom: isMobile?"65px":"55px", height: "100%" }}>
                 <Grid container justifyContent="center" style={{ height: "100%" }}>{children}</Grid>
             </main>
             <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
-                <Box>
+                <Box style={{marginBottom:isMobile?"10px":"0"}}>
                     <BottomNavigation
                         showLabels
                         value={bottomNavValue}
@@ -50,10 +49,8 @@ const Layout = ({ user, api, children }) => {
                                 }
                             </>
                         } />
-                        <BottomNavigationAction value={`/search`} label="검색" icon={<SearchIcon />} />
                         <BottomNavigationAction value={`/now`} label="지금" icon={<PlayCircleIcon />} />
-                        <BottomNavigationAction value={`/schedule`} label="일정" icon={<EventNoteIcon />} />
-                        <BottomNavigationAction value={`/task`} label="할 일" icon={<ListAltIcon />} />
+                        <BottomNavigationAction value={`/search`} label="검색" icon={<SearchIcon />} />
                     </BottomNavigation>
                 </Box>
             </Paper>

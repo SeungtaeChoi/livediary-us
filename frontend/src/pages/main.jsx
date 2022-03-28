@@ -7,10 +7,9 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import LoadingButton from '@mui/lab/LoadingButton';
 import '@fontsource/comfortaa';
-import { AlertDialog } from '../components/custom/dialog';
 import { changeToLowerCase } from '../services/function';
 
-const Main = ({ user, setUser, userInitObj, api }) => {
+const Main = ({ user, setUser, userInitObj, api, setAlertDialog }) => {
     // console.log('main');
 
     return (
@@ -18,7 +17,7 @@ const Main = ({ user, setUser, userInitObj, api }) => {
             <LayoutCenter>
                 <div style={{ height: "100%" }}>
                     <Header />
-                    {user.id ? <UserBody user={user} setUser={setUser} userInitObj={userInitObj} /> : <LoginBody user={user} setUser={setUser} api={api} />}
+                    {user.id ? <UserBody user={user} setUser={setUser} userInitObj={userInitObj} /> : <LoginBody user={user} setUser={setUser} api={api} setAlertDialog={setAlertDialog} />}
                 </div>
             </LayoutCenter>
         </Layout>
@@ -35,12 +34,11 @@ const Header = () => {
     )
 }
 
-const LoginBody = ({ user, setUser, api }) => {
+const LoginBody = ({ user, setUser, api, setAlertDialog }) => {
 
     //state
     const [stateLoginInfo, setStateLoginInfo] = useState({ userId: '', userPassword: '', });
     const [pageConfig, setPageConfig] = useState({ showPassword: false });
-    const [alertDialog, setAlertDialog] = useState({ isOpen: false, title: '', description: '' });
     const [lodingStateLoginButton, setLodingStateLoginButton] = useState(false);
 
     //ref
@@ -99,7 +97,7 @@ const LoginBody = ({ user, setUser, api }) => {
                 <div style={{ marginTop: "0%" }}>
                     <h2 style={{ textAlign: "center" }}>로그인</h2>
                     <TextField
-                        label="아이디"
+                        placeholder="아이디"
                         id="userId-input"
                         size="small"
                         inputRef={userIdInputRef}
@@ -108,7 +106,7 @@ const LoginBody = ({ user, setUser, api }) => {
                         required
                     />
                     <TextField
-                        label="비밀번호"
+                        placeholder="비밀번호"
                         id="userPassword-input"
                         size="small"
                         type={pageConfig.showPassword ? 'text' : 'password'}
@@ -136,16 +134,15 @@ const LoginBody = ({ user, setUser, api }) => {
                         style={{ width: '100%' }}
                     >로그인</LoadingButton>
                     <div style={{ marginTop: "1.5em" }}>
-                        <JoinBody user={user} api={api} />
+                        <JoinBody api={api} setAlertDialog={setAlertDialog} />
                     </div>
                 </div>
             </div>
-            <AlertDialog alertDialog={alertDialog} setAlertDialog={setAlertDialog} />
         </Box>
     )
 }
 
-const JoinBody = ({ user, api }) => {
+const JoinBody = ({ api, setAlertDialog }) => {
 
     //state
     const [pageConfig, setPageConfig] = useState({ showPassword: false });
@@ -153,7 +150,6 @@ const JoinBody = ({ user, api }) => {
     const stateJoinInfoObj = { userId: '', userPassword: '', userRePassword: '' }
     const [stateJoinInfo, setStateJoinInfo] = useState(stateJoinInfoObj);
     const [lodingStateJoinButton, setLodingStateJoinButton] = useState(false);
-    const [alertDialog, setAlertDialog] = useState({ isOpen: false, title: '', description: '' });
 
     //ref
     const userIdInputRef = useRef();
@@ -267,7 +263,7 @@ const JoinBody = ({ user, api }) => {
                 </DialogTitle>
                 <DialogContent>
                     <TextField
-                        label="아이디"
+                        placeholder="아이디"
                         id="userId-input"
                         size="small"
                         inputRef={userIdInputRef}
@@ -277,7 +273,7 @@ const JoinBody = ({ user, api }) => {
                         required
                     />
                     <TextField
-                        label="비밀번호"
+                        placeholder="비밀번호"
                         id="userPassword-input"
                         size="small"
                         type={pageConfig.showPassword ? 'text' : 'password'}
@@ -299,7 +295,7 @@ const JoinBody = ({ user, api }) => {
                         required
                     />
                     <TextField
-                        label="비밀번호"
+                        placeholder="비밀번호"
                         id="userRePassword-input"
                         size="small"
                         type={pageConfig.showPassword ? 'text' : 'password'}
@@ -331,7 +327,6 @@ const JoinBody = ({ user, api }) => {
                     <Button onClick={onClickJoinDialogCloseButton}>취소</Button>
                 </DialogActions>
             </Dialog>
-            <AlertDialog alertDialog={alertDialog} setAlertDialog={setAlertDialog} />
         </>
     )
 }

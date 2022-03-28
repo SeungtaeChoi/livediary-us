@@ -1,13 +1,19 @@
 import React from 'react';
+import { Layout, LayoutCenter } from '../layout';
 import { useParams } from 'react-router-dom';
 
-const Schedule = ({ user, api }) => {
+const Schedule = (props) => {
+    console.log(props);
 
     const { userId } = useParams();
     console.log('userId', userId);
 
     return (
-        <div>Schedule page</div>
+        <Layout>
+            <LayoutCenter>
+                <div>search</div>
+            </LayoutCenter>
+        </Layout >
     )
 }
 
