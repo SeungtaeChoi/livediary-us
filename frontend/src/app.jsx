@@ -10,7 +10,13 @@ import Now from './pages/now';
 import Common from './common';
 
 const App = ({ api }) => {
-    // console.log('app.js');
+    // 배포 환경에서 console.log, console.warn 지우기
+    if (process.env.NODE_ENV === "production") {
+        console.log = function no_console() { };
+        console.warn = function no_console() { };
+    }
+
+    console.log('app.js');
 
     //state
     const storage_user = JSON.parse(localStorage.getItem('user'));
