@@ -18,7 +18,7 @@ app.use(bodyParser.json()) //post - req.body 쓰기
 
 //라우팅
 const user = require('./routes/user'); app.use('/user', user);
-const task = require('./routes/task'); app.use('/task', task);
+const todo = require('./routes/todo'); app.use('/todo', todo);
 
 //실행
 app.listen(PORT, () => {
