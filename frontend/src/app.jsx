@@ -2,14 +2,15 @@ import { useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import './app.css';
 import Main from './pages/main';
-import Schedule from './pages/schedule';
 import Search from './pages/search';
-import Task from './pages/task';
+// import Task from './pages/task';
 import Verifing from './components/verifing/verifing';
 import Now from './pages/now';
 import Common from './common';
+import NotFound from './pages/notFound';
 
 const App = ({ api }) => {
+
     // 배포 환경에서 console.log, console.warn 지우기
     if (process.env.NODE_ENV === "production") {
         console.log = function no_console() { };
@@ -69,6 +70,9 @@ const App = ({ api }) => {
                             alertDialog={alertDialog}
                             setAlertDialog={setAlertDialog}
                         />
+                    } />
+                    <Route path="*" element={
+                        <NotFound />
                     } />
                 </Route>
                 :

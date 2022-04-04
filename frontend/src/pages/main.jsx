@@ -10,7 +10,7 @@ import '@fontsource/comfortaa';
 import { changeToLowerCase } from '../services/function';
 
 const Main = ({ user, setUser, userInitObj, api, setAlertDialog }) => {
-    // console.log('main');
+    console.log('main');
 
     return (
         <Layout user={user} api={api}>
@@ -47,7 +47,7 @@ const LoginBody = ({ user, setUser, api, setAlertDialog }) => {
 
     //fn
     const onClickShowPasswordButton = (e) => {
-        // console.log('비밀번호 보임/숨김 토글버튼 클릭 시')
+        console.log('비밀번호 보임/숨김 토글버튼 클릭 시')
         e.preventDefault();
         setPageConfig({
             ...pageConfig,
@@ -56,12 +56,12 @@ const LoginBody = ({ user, setUser, api, setAlertDialog }) => {
     }
 
     const onChangeInput = (prop) => (event) => {
-        // console.log(`${prop}의 값을 ${event.target.value}로 변경`);
+        console.log(`${prop}의 값을 ${event.target.value}로 변경`);
         setStateLoginInfo({ ...stateLoginInfo, [prop]: event.target.value });
     };
 
     const onClickLoginButton = async () => {
-        // console.log('로그인버튼 클릭 시');
+        console.log('로그인버튼 클릭 시');
 
         //1. 로딩상태로 변경
         setLodingStateLoginButton(true);
@@ -69,7 +69,7 @@ const LoginBody = ({ user, setUser, api, setAlertDialog }) => {
 
             //2. 로그인 실행
             const result = await api.post(`/user/login`, { userId: stateLoginInfo.userId, userPassword: stateLoginInfo.userPassword });
-            // console.log(result);
+            console.log(result);
             setLodingStateLoginButton(false);
             switch (result.error) {
                 case undefined: //성공
@@ -174,17 +174,17 @@ const JoinBody = ({ api, setAlertDialog }) => {
     }
 
     const onChangeInput = (prop) => (event) => {
-        // console.log(`${prop}의 값을 ${event.target.value}로 변경`);
+        console.log(`${prop}의 값을 ${event.target.value}로 변경`);
         setStateJoinInfo({ ...stateJoinInfo, [prop]: event.target.value });
     };
 
     const onBlurUserIdInput = (e) => {
-        // console.log('아이디는 소문자로 변경');
+        console.log('아이디는 소문자로 변경');
         setStateJoinInfo({ ...stateJoinInfo, userId: changeToLowerCase(e.target.value) });
     }
 
     const onClickShowPasswordButton = (e) => {
-        // console.log('비밀번호 보임/숨김 토글버튼 클릭 시')
+        console.log('비밀번호 보임/숨김 토글버튼 클릭 시')
         e.preventDefault();
         setPageConfig({
             ...pageConfig,
@@ -193,14 +193,14 @@ const JoinBody = ({ api, setAlertDialog }) => {
     }
 
     const onClickJoinButton = async () => {
-        // console.log('회원가입 창 저장 버튼 클릭 시');
+        console.log('회원가입 창 저장 버튼 클릭 시');
 
         //1. 로딩상태로 변경
         setLodingStateJoinButton(true);
         setTimeout(async () => {
 
             if (stateJoinInfo.userPassword !== stateJoinInfo.userRePassword) {
-                // console.log('비밀번호가 다른 경우');
+                console.log('비밀번호가 다른 경우');
 
                 userRePasswordInputRef.current.focus();
                 setAlertDialog({ isOpen: true, title: '비밀번호를 동일하게 입력해 주세요.' });
@@ -209,7 +209,7 @@ const JoinBody = ({ api, setAlertDialog }) => {
 
                 //2. 회원가입 실행
                 const result = await api.post(`/user`, { userId: stateJoinInfo.userId, userPassword: stateJoinInfo.userPassword });
-                // console.log(result);
+                console.log(result);
                 switch (result.error) {
                     case undefined: //성공
                         setAlertDialog({ isOpen: true, title: '회원가입 완료' });
@@ -336,7 +336,7 @@ const UserBody = ({ user, setUser, userInitObj }) => {
 
     //fn
     const onClickLogOutButton = () => {
-        // console.log("로그아웃 버튼 클릭 시");
+        console.log("로그아웃 버튼 클릭 시");
         localStorage.removeItem('access_token');
         localStorage.removeItem('user');
         setUser({ ...user, id: null });

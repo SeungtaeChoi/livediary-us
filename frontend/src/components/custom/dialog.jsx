@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
-import { isBrowser } from 'react-device-detect';
+import { isMobile, isBrowser } from 'react-device-detect';
 
 const AlertDialog = (props) => {
 

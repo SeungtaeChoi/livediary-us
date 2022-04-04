@@ -11,6 +11,7 @@ const Common = ({ alertDialog, setAlertDialog, confirmDialog, setConfirmDialog, 
             <AlertDialog alertDialog={alertDialog} setAlertDialog={setAlertDialog} />
             <ConfirmDialog confirmDialog={confirmDialog} setConfirmDialog={setConfirmDialog} />
             <AlertSnackbar snackbar={snackbar} setSnackbar={setSnackbar} />
+
             <Outlet />
         </>
     );
