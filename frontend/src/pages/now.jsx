@@ -17,23 +17,25 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import 'moment/locale/ko';
 import LinearProgress from '@mui/material/LinearProgress';
 
-const Now = ({ user, api, setConfirmDialog, setSnackbar }) => {
+const Now = ({ user, api, setAlertDialog, setConfirmDialog, setSnackbar }) => {
     console.log('now');
 
     /* todo : 할 일
         {
             id: 'r1',
+            user_id: '',
             title: '헬스',
             date:'2022-03-17',
             time:'',
             during:'',
             checked: false
-            state: 'ok'
             time_fix: false
+            state: 'ok'
         }
     */
     const today = moment().format('YYYY-MM-DD');
     const [todos, setTodos] = useState([]);
+    const [todosOrder, setTodosOrder] = useState([]);
     const location = useLocation();
     const dayText = moment().locale("ko").format('ddd');
     const navigate = useNavigate();
@@ -60,21 +62,33 @@ const Now = ({ user, api, setConfirmDialog, setSnackbar }) => {
         console.log('할 일 변경', newTodos);
         let result = true;
 
-        calcSaveTodos(newTodos);
+        calcTodos(newTodos);
 
         return result;
     }, []);
 
-    const onInsertTodo = useCallback(newTodo => {
+    const onInsertTodo = useCallback( async (newTodo) => {
         console.log('할 일 등록', newTodo);
-        let result = true;
+        let result = false;
 
         const newTodos = [...todos];
-        newTodos.push(newTodo);
-        calcSaveTodos(newTodos);
+
+        //db insert
+        const requestData = newTodo;
+        requestData['request_id'] = user.id;
+        const res = await api.post(`/todo`, requestData);
+        switch(res.error){
+            case undefined: //성공
+                result = true;
+                newTodos.push(newTodo);
+                calcTodos(newTodos);
+            break;
+            default:
+                setAlertDialog({ isOpen: true, title: '잠시 후에 다시 시도해 주세요.' });
+        }
 
         return result;
-    }, [todos]);
+    }, [todos, api, setAlertDialog, user.id]);
 
     const onDeleteTodo = useCallback(seletedTodoItem => {
         console.log('할 일 삭제', seletedTodoItem);
@@ -84,12 +98,12 @@ const Now = ({ user, api, setConfirmDialog, setSnackbar }) => {
         const newTodos = [...todos];
         newTodos.splice(index, 1);
 
-        calcSaveTodos(newTodos);
+        calcTodos(newTodos);
 
         return result;
     }, [todos]);
 
-    const calcSaveTodos = todos => {
+    const calcTodos = todos => {
         console.log('할 일 셋팅 (시간 자동 계산)', todos);
         let result = true;
 
@@ -167,7 +181,7 @@ const Now = ({ user, api, setConfirmDialog, setSnackbar }) => {
                             onPopupTodo={onPopupTodo}
                         />
                         <TodoInsertArea
-                            todos={todos}
+                            user={user}
                             onInsertTodo={onInsertTodo}
                             setSnackbar={setSnackbar}
                             today={today}
@@ -284,7 +298,6 @@ const TodoListItem = memo(({ item, index, today, nowTime, onClickItemCheck, onPo
                                 {item.during &&
                                     <span style={{ fontSize: "1rem", wordBreak: "keep-all", color: item.check ? "#aaa" : "#777", fontWeight: "500", marginLeft: "0.3em" }}>({item.during})</span>
                                 }
-
                             </div>
                             {!item.check &&
                                 <div>
@@ -338,10 +351,10 @@ const TodoTimerInfo = ({ today, nowTime, todo }) => {
             if (startSign === '+') {
                 let startToEndDiffSecond = endTimeMoment.diff(startTimeMoment, 'seconds');
                 progress = Math.floor((startDiffSecond / startToEndDiffSecond) * 100);
+                if(progress > 100) { progress = 100; }
                 progressState = true;
             }
         }
-
     }
 
 
@@ -360,7 +373,7 @@ const TodoTimerInfo = ({ today, nowTime, todo }) => {
     );
 }
 
-const TodoInsertArea = memo(({ onInsertTodo, setSnackbar, today }) => {
+const TodoInsertArea = memo(({ user, onInsertTodo, setSnackbar, today }) => {
     console.log('할 일 입력 영역');
 
     const [keyPressState, setKeyPressState] = useState(false);
@@ -423,14 +436,15 @@ const TodoInsertArea = memo(({ onInsertTodo, setSnackbar, today }) => {
         let title = inputValueArray[ti].trim();
 
         const item = {
-            id: `r-${id}`,
+            id: `${user.id}-${id}`,
+            user_id: user.id,
             title: title,
             date: date,
             time: time, //시각
             during: during, //소요시간
             check: false,
-            state: 'ok',
             time_fix: time_fix,
+            state: 'ok',
         };
 
         return item;

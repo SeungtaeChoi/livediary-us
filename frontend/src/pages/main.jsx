@@ -67,8 +67,13 @@ const LoginBody = ({ user, setUser, api, setAlertDialog }) => {
         setLodingStateLoginButton(true);
         setTimeout(async () => {
 
+            const requestData = {
+                userId: stateLoginInfo.userId,
+                userPassword: stateLoginInfo.userPassword
+            }
+
             //2. 로그인 실행
-            const result = await api.post(`/user/login`, { userId: stateLoginInfo.userId, userPassword: stateLoginInfo.userPassword });
+            const result = await api.post(`/user/login`, requestData);
             console.log(result);
             setLodingStateLoginButton(false);
             switch (result.error) {

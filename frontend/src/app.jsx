@@ -12,7 +12,8 @@ import NotFound from './pages/notFound';
 const App = ({ api }) => {
 
     // 배포 환경에서 console.log, console.warn 지우기
-    if (process.env.NODE_ENV === "production") {
+    if (process.env.NODE_ENV === "production" ) {
+    // if (process.env.NODE_ENV === "production" || "development") {
         console.log = function no_console() { };
         console.warn = function no_console() { };
     }
@@ -51,6 +52,7 @@ const App = ({ api }) => {
                         <Now
                             user={user}
                             api={api}
+                            setAlertDialog={setAlertDialog}
                             setConfirmDialog={setConfirmDialog}
                             setSnackbar={setSnackbar}
                         />

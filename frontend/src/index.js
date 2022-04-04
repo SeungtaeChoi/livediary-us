@@ -5,7 +5,7 @@ import './index.css';
 import App from './app';
 import Api from './services/api';
 
-console.log('index.js');
+// console.log('index.js');
 
 const api = new Api(`${window.location.protocol}//${window.location.hostname}:4000`);
 
